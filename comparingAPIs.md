@@ -55,6 +55,8 @@ If there are major changes to how information is handled or consumed on the clie
 
 For the most part, when using RESTful APIs, the team must understand how users will interact with the endpoint before setting it up.
 
+RESTful APIs aren't setup to be asynchronous so there can be latency issues if it's being hit by many clients at once. There are tactics to minimize this issue (setting up multiple duplicates or sharding).
+
 <br>
 
 > Overfetching: Downloading superfluous data  
@@ -161,4 +163,51 @@ Read more about [What is gRPC?](https://visualstudiomagazine.com/articles/2019/0
 <br>
 <br>
 
+# AMPQ (Advanced Message Queuing Protocol)
 
+What happens when your API crashes and the client is still make requests? Are those requests and pieces of data lost?
+
+Today, when we consider using the cloud, users expect failures to happen but also be handled gracefully. 
+
+A message queue allows a message broker to store the incoming requests in a queue to ensure that they can be handled (now or later) instead of being lost. Think of it as middleware -- Message Oriented Middleware.
+
+It can be configured to route and distribute messages according to different rules.
+
+
+> Think of it as a mail service. You (the producer) are sending a letter (your message) to someone (the consumer), and you do this by specifying the address (the routing logic for the message, such as the topic on which it is published) and by giving the letter to the local Post office (the message broker). After you deliver the letter, it's no longer your business to ensure that it actually arrives at your friend. The postal service will take care of that.  
+>  
+> With message systems, I can send my request and forget about it. If the callee cannot receive it the broker will keep the message in the queue, and then deliver it when the consumer connects back. My response will come back when it can and I won't have to block or wait for it.  
+> 
+> -- [Why you should switch to message queues](https://dev.to/matteojoliveau/microservices-communications-why-you-should-switch-to-message-queues--48ia)  
+
+<br>
+
+Rather than manually setting up a way to distribute high traffic loads with RESTful APIs, the message broker acts a load balancer. 
+
+`RabbitMQ` is a [broker system](https://www.rabbitmq.com) that supports message queueing. This supports asynchronous messaging which can increase efficiency, especially when an issue arises.
+
+You can use RESTful APIs with AMPQ, or use each one on its own. However, using them in tandem tends to be the best scalable solution.
+
+<br>
+
+### What is great about message queues?
+
+AMPQs provide a buffer between the server and the client to prevent redundancy and data loss.
+
+They also smoothly handle traffic spikes, decreasing latency, load times, and providing batching.
+
+If your application will have a high volume of message/requests in a short period of time, it can handle that concurrency challenge. 
+
+<br>
+
+### What are the cons?
+
+It can take a lot of work to get setup with RabbitMQ, MSMQ, or even Azure and AWS. 
+
+<br>
+<br>
+
+
+# What about event driven API options?
+
+[Learn more here](https://nordicapis.com/5-protocols-for-event-driven-api-architectures/)

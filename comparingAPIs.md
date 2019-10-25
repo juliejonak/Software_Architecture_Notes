@@ -2,6 +2,10 @@
 
 When it comes to handling backend architecture, specifically the API endpoints for sending and receiving data, there are a lot of options. We're going to compare Client Side (GraphQL), Server Side (REST), gRPC web services, and Message Queue.
 
+[This article](https://nordicapis.com/is-rest-still-a-relevant-api-style/) provides a nice overview of REST, GraphQL and gRPC.
+
+<br>
+
 # Server Side (RESTful)
 
 REST stands for `REpresentational State Transfer` and is an architecture system that provides universal standards so different computer systems can communicate on the web.
@@ -129,5 +133,32 @@ Read more about REST v GraphQL in [this comparison](https://goodapi.co/blog/rest
 <br>
 
 # gRPC
+
+Developed by Google Cloud, gRPC is an open-source RPC framework. gRPC stands for `(Google) Remote Procedure Call`, aimed at being a highly performant and functional.
+
+Unlike REST that typically uses JSON for sending data, gRPC relies on Protobuf, a more compact and data-typed format:
+
+> Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.  
+> -- [Google Docs](https://developers.google.com/protocol-buffers/)
+
+<br>
+
+### What's great about gRPC?
+
+It's highly performant because of its compact data load and has low latency. It's build on HTTP/2 (which addresses some issues that HTTP/1 has) and supports bi-directional communication.
+
+
+### What are the cons?
+
+gRPC service can only communicate with gRPC clients, unlike RESTful endpoints that allow anyone using the HTTP protocol to interact. The code generation from using Protobuf is inconsistent across languages, which makes it difficult to scale in a public facing API.
+
+Because of this limitation, it's better used for internal organizations' APIs, where there is already consistent language support, practices and docs. The uphill learning curve can slow down growth.
+
+gRPC also doesn't have cacheability or allow for flexible content types.
+
+Read more about [What is gRPC?](https://visualstudiomagazine.com/articles/2019/08/28/grpc-web-services.aspx). 
+
+<br>
+<br>
 
 

@@ -49,6 +49,8 @@ There isn't a way for the client to specify what data they do (or don't) need. T
 
 If there are major changes to how information is handled or consumed on the client side, it could result in needing to tweak the REST endpoint. This can slow down iterations. The frontend and backend teams tend to need consistent communication about the data models and how they change.
 
+For the most part, when using RESTful APIs, the team must understand how users will interact with the endpoint before setting it up.
+
 <br>
 
 > Overfetching: Downloading superfluous data  
@@ -62,5 +64,70 @@ If there are major changes to how information is handled or consumed on the clie
 
 <br>
 <br>
+
+# GraphQL (Client Side)
+
+GraphQL differs from REST in two significant ways: it has only one endpoint that the client will send requests to, and the client dictates what data it wants in the response.
+
+Instead of having to make multiple queries to get the exact data the client needs, and maybe over-fetching by doing so, with GraphQL, the client define the response format with `client-specified queries`.
+
+GraphQL is not language specific (it can communicate to anyone writing in GraphQL), is best for hierarchical structures, and is strong-typing (it doesn't care how you store and handle the data response, but all queries must be formatted specifically to GraphQL's syntax).
+
+Hierarchal is top-down data fetching, meaning clients can write their queries in a more natural way. In GraphQL, a query to fetch a specific user, their details and related friends might look like this:
+
+```
+{
+  user(id: 1) {
+    name
+    age
+    friends {
+      name
+    }
+  }
+}
+```
+
+Which matches the structure in the application well:
+
+```
+<App>
+  <User>
+    <Friend/>
+    <Friend/>
+  </User>
+</App>
+```
+
+Whereas with a RESTful API endpoint, the request is less intuitive and might have to be very specific or span multiple requests to fetch all that data:
+
+```GET /users/1 and GET /users/1/friends```
+```GET /users/1?include=friends.name```
+
+<br>
+
+### What makes GraphQL great?
+
+It's best when the client needs a flexible response - the same query isn't being made consistently. This allows data overhead to me minimized and avoid over-fetching and excessive requests. This allows the client to change their respond format without needing the backend to change. 
+
+This flexiblity also allows an application to iterate quickly without having to work in tandem on the front and back end. Once the GraphQL endpoint is setup and the schema is designed, both teams can work independently. This allows the teams to set it up before doing extensive user tests, because the client can dictate their own needs.
+
+<br>
+
+### What are the cons?
+
+GraphQL can be slower without the simplicity of RESTful caching and uses solely POST responses, limits the flexibility of content types that can be sent.
+
+There is also limited endpoint security and still limited tooling with being a newer resource. Libraries like Apollo or Relay are needed on the frontend to help with sending and formatting queries on the client side. 
+
+
+Because even a small amount of latency can significantly decrease user traffic, optimization is a valid concern, with complex queries requiring more time to parse and send back the client indicated response.
+
+Learn about GraphQL in [this overview](https://blog.risingstack.com/graphql-overview-getting-started-with-graphql-and-nodejs/).  
+Read more about REST v GraphQL in [this comparison](https://goodapi.co/blog/rest-vs-graphql).  
+
+<br>
+<br>
+
+# gRPC
 
 
